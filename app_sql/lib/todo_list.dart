@@ -1,0 +1,17 @@
+import 'package:flutter/material.dart';
+
+class TodoListScreen extends StatefulWidget {
+  static const routeName = '/todos';
+
+  const TodoListScreen({super.key});
+
+  @override
+  State<TodoListScreen> createState() => _TodoListScreenState();
+}
+
+class _TodoListScreenState extends State<TodoListScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
