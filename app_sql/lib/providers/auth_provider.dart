@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -17,21 +15,14 @@ class AuthProvider extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    final url = Uri.parse('https://dummyjson.com/auth/login');
-
     try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'username': username,
-          'password': password,
-        }),
-      );
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        _token = data['token'];
-        _userId = data['id'];
+      await Future.delayed(
+          const Duration(seconds: 1)); // simulate network delay
+
+      // 🔥 Fake manual check instead of calling DummyJSON
+      if (username.trim() == 'kminchelle' && password.trim() == '0lelplR') {
+        _token = 'fakeToken_123456';
+        _userId = 5; // any dummy user id
 
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', _token!);
@@ -39,8 +30,7 @@ class AuthProvider extends ChangeNotifier {
 
         notifyListeners();
       } else {
-        final data = json.decode(response.body);
-        throw Exception(data['message'] ?? 'Authentication failed');
+        throw Exception('Invalid username or password');
       }
     } catch (e) {
       rethrow;

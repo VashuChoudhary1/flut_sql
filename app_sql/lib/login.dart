@@ -1,7 +1,7 @@
-import 'package:app_sql/providers/auth_provider.dart';
 import 'package:app_sql/todo_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,6 +14,14 @@ class _LoginScreenState extends State<LoginScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   void _submit() async {
     if (!_formKey.currentState!.validate()) {
       return;
@@ -37,14 +45,20 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  // ✅ Autofill Demo Login
+  void _autofillDemoLogin() {
+    setState(() {
+      _usernameController.text = 'kminchelle';
+      _passwordController.text = '0lelplR';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Login"),
-      ),
+      appBar: AppBar(title: const Text("Login")),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -77,9 +91,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 24),
                 authProvider.isLoading
                     ? const CircularProgressIndicator()
-                    : ElevatedButton(
-                        onPressed: _submit,
-                        child: const Text('Login'),
+                    : Column(
+                        children: [
+                          ElevatedButton(
+                            onPressed: _submit,
+                            child: const Text('Login'),
+                          ),
+                          const SizedBox(height: 12),
+                          TextButton(
+                            onPressed: _autofillDemoLogin,
+                            child: const Text('Use Demo Credentials'),
+                          ),
+                        ],
                       ),
               ],
             ),
