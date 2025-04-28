@@ -45,7 +45,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  // ✅ Autofill Demo Login
   void _autofillDemoLogin() {
     setState(() {
       _usernameController.text = 'kminchelle';
@@ -58,56 +57,115 @@ class _LoginScreenState extends State<LoginScreen> {
     final authProvider = Provider.of<AuthProvider>(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Login")),
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: _usernameController,
-                  decoration: const InputDecoration(labelText: 'Username'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter username';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _passwordController,
-                  decoration: const InputDecoration(labelText: 'Password'),
-                  obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter password';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 24),
-                authProvider.isLoading
-                    ? const CircularProgressIndicator()
-                    : Column(
-                        children: [
-                          ElevatedButton(
-                            onPressed: _submit,
-                            child: const Text('Login'),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF7F00FF), Color(0xFFE100FF)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.white.withOpacity(0.3)),
+              ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.lock_outline,
+                        size: 64, color: Colors.white),
+                    const SizedBox(height: 16),
+                    Text('Welcome Back',
+                        style:
+                            Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                    const SizedBox(height: 32),
+                    TextFormField(
+                      controller: _usernameController,
+                      decoration: _inputDecoration('Username', Icons.person),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter username';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: _inputDecoration('Password', Icons.lock),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter password';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 24),
+                    authProvider.isLoading
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : Column(
+                            children: [
+                              SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 16),
+                                    backgroundColor: Colors.white,
+                                    foregroundColor: Colors.deepPurple,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  onPressed: _submit,
+                                  child: const Text('Login',
+                                      style: TextStyle(fontSize: 18)),
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              TextButton(
+                                onPressed: _autofillDemoLogin,
+                                child: const Text(
+                                  'Use Demo Credentials',
+                                  style: TextStyle(color: Colors.white70),
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 12),
-                          TextButton(
-                            onPressed: _autofillDemoLogin,
-                            child: const Text('Use Demo Credentials'),
-                          ),
-                        ],
-                      ),
-              ],
+                  ],
+                ),
+              ),
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  InputDecoration _inputDecoration(String label, IconData icon) {
+    return InputDecoration(
+      labelText: label,
+      prefixIcon: Icon(icon, color: Colors.white),
+      filled: true,
+      fillColor: Colors.white.withOpacity(0.2),
+      labelStyle: const TextStyle(color: Colors.white),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide.none,
       ),
     );
   }

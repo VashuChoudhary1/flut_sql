@@ -20,8 +20,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
     Future.delayed(Duration.zero).then((_) {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final todoProvider = Provider.of<TodoProvider>(context, listen: false);
-      todoProvider
-          .fetchTodos(authProvider.userId ?? 5); // Default fallback user id
+      todoProvider.fetchTodos(authProvider.userId ?? 5);
     });
   }
 
@@ -32,10 +31,11 @@ class _TodoListScreenState extends State<TodoListScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Todos'),
+        backgroundColor: Colors.deepPurple,
+        title: const Text('My Todos', style: TextStyle(color: Colors.white)),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout),
+            icon: const Icon(Icons.logout, color: Colors.white),
             onPressed: () {
               authProvider.logout();
               Navigator.of(context).pushReplacementNamed('/');
@@ -43,20 +43,27 @@ class _TodoListScreenState extends State<TodoListScreen> {
           ),
         ],
       ),
+      backgroundColor: Colors.deepPurple.shade50,
       body: todoProvider.isLoading
           ? const Center(child: CircularProgressIndicator())
           : todoProvider.todos.isEmpty
-              ? const Center(child: Text('No todos found!'))
-              : ListView.builder(
+              ? const Center(
+                  child:
+                      Text('No todos found!', style: TextStyle(fontSize: 18)))
+              : ListView.separated(
+                  padding: const EdgeInsets.all(16),
                   itemCount: todoProvider.todos.length,
                   itemBuilder: (ctx, i) =>
                       TodoTile(todo: todoProvider.todos[i]),
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 12),
                 ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.deepPurple,
         onPressed: () {
           todoProvider.addTodoDialog(context);
         },
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

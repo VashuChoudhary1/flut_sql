@@ -15,7 +15,10 @@ class TodoTile extends StatelessWidget {
     return Dismissible(
       key: ValueKey(todo.id),
       background: Container(
-        color: Colors.red,
+        decoration: BoxDecoration(
+          color: Colors.redAccent,
+          borderRadius: BorderRadius.circular(12),
+        ),
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: const Icon(Icons.delete, color: Colors.white, size: 32),
@@ -25,11 +28,14 @@ class TodoTile extends StatelessWidget {
         todoProvider.deleteTodo(todo);
       },
       child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        elevation: 5,
         child: ListTile(
           leading: Checkbox(
+            activeColor: Colors.deepPurple,
             value: todo.completed,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
             onChanged: (value) {
               todoProvider.toggleTodoStatus(todo);
             },
@@ -37,12 +43,17 @@ class TodoTile extends StatelessWidget {
           title: Text(
             todo.todo,
             style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
               decoration: todo.completed ? TextDecoration.lineThrough : null,
+              color: todo.completed ? Colors.grey : Colors.black87,
             ),
           ),
-          trailing: todo.completed
-              ? const Icon(Icons.check_circle, color: Colors.green)
-              : const Icon(Icons.radio_button_unchecked, color: Colors.grey),
+          trailing: Icon(
+            todo.completed ? Icons.check_circle_rounded : Icons.circle_outlined,
+            color: todo.completed ? Colors.green : Colors.grey,
+            size: 28,
+          ),
         ),
       ),
     );
